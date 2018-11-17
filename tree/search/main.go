@@ -15,6 +15,23 @@ import (
 //if node is nil it's impossible to perform insert,
 //you may return without doing anything, or panic.
 func Insert(node *Node, value int) {
+	// worst case: O(log n) - height of the tree
+	if node == nil {
+		panic("Could not plant node!")
+	}
+	if value < node.Value {
+		if node.Left != nil {
+			Insert(node.Left, value)
+		} else {
+			node.Left = &Node{Value: value}
+		}
+	} else {
+		if node.Right != nil {
+			Insert(node.Right, value)
+		} else {
+			node.Right = &Node{Value: value}
+		}
+	}
 }
 
 //Recursively print the items in the tree from small to large
@@ -22,6 +39,11 @@ func Insert(node *Node, value int) {
 //if not nil, we recursively call PrintSorted with the left node, then print the current node
 //then call PrintSorted with the right node.
 func PrintSorted(node *Node) {
+	if node != nil {
+		PrintSorted(node.Left)
+		fmt.Println(node.Value)
+		PrintSorted(node.Right)
+	}
 }
 
 func main() {
@@ -34,6 +56,10 @@ func main() {
 	Insert(&root, 2)
 	Insert(&root, 3)
 	Insert(&root, 1)
+	Insert(&root, 2)
+	Insert(&root, 5)
+	Insert(&root, 11)
+	Insert(&root, 0)
 	fmt.Println(PrintTree(&root))
 	PrintSorted(&root)
 	fmt.Print("\n")

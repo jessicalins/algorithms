@@ -4,12 +4,13 @@ import "fmt"
 
 func main() {
 	s := []int{5, 2, 3, 5, 9, 1, -1, 0, -4, 2}
+	fmt.Println("unsorted: ", s)
 	quicksort(s)
 	fmt.Println("result: ", s)
 
-	//s = []int{5, 2, 3, 5, 9, 1, -1, 0, -4, 2}
-	//quickSortIterative(s)
-	//fmt.Println("result: ", s)
+	s = []int{5, 2, 3, 5, 9, 1, -1, 0, -4, 2}
+	quickSortIterative(s)
+	fmt.Println("result: ", s)
 }
 
 /*
@@ -28,8 +29,15 @@ Instead we need to check the length of our slice and stop when
 there's nothing to sort (length < 2)
 To slice given slice a from 0 to l (not including l): a[:l]
 To slice given slice a from l to the end of a: a[l:]
- */
+*/
 func quicksort(unsorted []int) {
+	hi := len(unsorted) - 1
+
+	if hi > 2 {
+		pivot := partition(unsorted)
+		quicksort(unsorted[:pivot])
+		quicksort(unsorted[pivot+1:])
+	}
 }
 
 func swap(arr []int, i, j int) {
@@ -39,12 +47,10 @@ func swap(arr []int, i, j int) {
 }
 
 func partition(arr []int) int {
-	//fmt.Println("in: ", arr)
 	l := 0
-	h := len(arr) - 1
-	pivot := arr[h]
-	//fmt.Println("pivot:", pivot)
-	i := l - 1
+	h := len(arr) - 1 // before last
+	pivot := arr[h]   //last
+	i := l - 1        // -1
 
 	for j := l; j <= h-1; j++ {
 		if arr[j] < pivot {
@@ -53,7 +59,6 @@ func partition(arr []int) int {
 		}
 	}
 	swap(arr, i+1, h)
-	//fmt.Println("out:", arr)
 	return i + 1
 }
 
@@ -74,7 +79,7 @@ func quickSortIterative(arr []int) {
 		l, r = stack[top].left, stack[top].right
 		top--
 
-		p := partition(arr[l: r])
+		p := partition(arr[l:r])
 
 		//p is the index of the pivot in the inner slice, add l to get
 		//its index in the outer slice
